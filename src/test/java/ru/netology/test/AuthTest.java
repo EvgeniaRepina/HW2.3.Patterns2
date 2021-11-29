@@ -28,9 +28,9 @@ class AuthTest {
     }
 
     @Test
-//    @DisplayName("Should successfully login with active registered user")
+    @DisplayName("Should successfully login with active registered user")
     void shouldSuccessfulLoginIfRegisteredActiveUser() {
-//        var registeredUser = getRegisteredUser("active");
+        var registeredUser = getRegisteredUser("active");
         // TODO: добавить логику теста, в рамках которого будет выполнена попытка входа в личный кабинет с учётными
         //  данными зарегистрированного активного пользователя, для заполнения полей формы используйте
         //  пользователя registeredUser
