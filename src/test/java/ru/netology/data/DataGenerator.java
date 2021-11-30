@@ -1,18 +1,14 @@
 package ru.netology.data;
 
 import com.github.javafaker.Faker;
-import com.github.javafaker.Internet;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import lombok.Value;
-import lombok.val;
 
-import java.sql.ConnectionBuilder;
 import java.util.Locale;
 
-import static io.restassured.RestAssured.form;
 import static io.restassured.RestAssured.given;
 
 public class DataGenerator {
@@ -34,9 +30,11 @@ public class DataGenerator {
         // сам запрос преобразован в JSON
         given() // "дано"
                 .spec(requestSpec) // указываем, какую спецификацию используем
-                .body(new RegistrationDto("vasya", "password", "active")); // передаём в теле объект, который будет
-
-
+                .body(user) // передаём в теле объект, который будет
+                .when()
+                .post("/api/system/users")
+                .then()
+                .statusCode(200);
     }
 
     public static String getRandomLogin() {
@@ -51,8 +49,7 @@ public class DataGenerator {
         // TODO: добавить логику для объявления переменной password и задания её значения, для генерации
         //  случайного пароля используйте faker
         Faker faker = new Faker(new Locale("en"));
-        Internet internet = null;
-        String password = internet.password();
+        String password = faker.internet().password();
         return password;
     }
 
@@ -61,16 +58,16 @@ public class DataGenerator {
         }
 
         public static RegistrationDto getUser(String status) {
-//            // TODO: создать пользователя user используя методы getRandomLogin(), getRandomPassword() и параметр status
+            // TODO: создать пользователя user используя методы getRandomLogin
             RegistrationDto user = new RegistrationDto(getRandomLogin(), getRandomPassword(), status);
             return user;
-
         }
 
         public static RegistrationDto getRegisteredUser(String status) {
             // TODO: объявить переменную registeredUser и присвоить ей значение возвращённое getUser(status).
             // Послать запрос на регистрацию пользователя с помощью вызова sendRequest(registeredUser)
             RegistrationDto registeredUser = getUser(status);
+            sendRequest(registeredUser);
             return registeredUser;
         }
     }
@@ -80,6 +77,5 @@ public class DataGenerator {
         String login;
         String password;
         String status;
-
-        }
+    }
 }
